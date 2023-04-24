@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-class HandLingErrorsTest {
+class HandlingErrorsTest {
 
     private val userRepository = mockk<UserRepository>(relaxUnitFun = true)
 
-    private val handLingErrors = HandLingErrors(userRepository)
+    private val handLingErrors = HandlingErrors(userRepository)
 
     @Nested
     inner class PropagatingASingleError {
@@ -100,7 +100,7 @@ class HandLingErrorsTest {
 
         @Test
         fun `should recover from saying hello when user does not exist`() {
-            val handLingErrors = HandLingErrors(object : UserRepository {
+            val handLingErrors = HandlingErrors(object : UserRepository {
                 context(Raise<UserNotFound>) override fun find(id: UUID): User = raise(UserNotFound)
                 override fun save(user: User): Unit = TODO("Not yet implemented")
             })
@@ -131,7 +131,7 @@ class HandLingErrorsTest {
             val follower = User(UUID.randomUUID(), "John", emptyList())
             val followed = User(UUID.randomUUID(), "Jane", emptyList())
 
-            val result = HandLingErrors(object : UserRepository {
+            val result = HandlingErrors(object : UserRepository {
                 context(Raise<UserNotFound>) override fun find(id: UUID): User = raise(UserNotFound)
                 override fun save(user: User): Unit = TODO("Not yet implemented")
             }).followWithFullErrorRecovering(follower.id, followed.id)
@@ -188,7 +188,7 @@ class HandLingErrorsTest {
             val followed = User(UUID.randomUUID(), "Jane", emptyList())
 
             val result = either {
-                HandLingErrors(object : UserRepository {
+                HandlingErrors(object : UserRepository {
                     context(Raise<UserNotFound>) override fun find(id: UUID): User = raise(UserNotFound)
                     override fun save(user: User): Unit = TODO("Not yet implemented")
                 }).followWithFullErrorRecovering(follower.id, followed.id)

@@ -28,7 +28,7 @@ interface UserRepository {
     fun save(user: User)
 }
 
-class HandLingErrors(private val userRepository: UserRepository) {
+class HandlingErrors(private val userRepository: UserRepository) {
 
     /**
      * Use-case: Propagate a single error
